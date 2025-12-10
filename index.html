@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rapper or Philosopher?</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            background: #0a0a0a;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(118, 75, 162, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(240, 147, 251, 0.1) 0%, transparent 40%);
+            pointer-events: none;
+            animation: backgroundFloat 20s ease-in-out infinite;
+        }
+
+        @keyframes backgroundFloat {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.1); }
+        }
+
+        .container {
+            background: rgba(18, 18, 18, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 32px;
+            padding: 64px;
+            max-width: 900px;
+            width: 100%;
+            box-shadow: 
+                0 32px 64px rgba(0, 0, 0, 0.5),
+                0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+            position: relative;
+            z-index: 1;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 200px;
+            background: linear-gradient(180deg, rgba(102, 126, 234, 0.1) 0%, transparent 100%);
+            border-radius: 32px 32px 0 0;
+            pointer-events: none;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 8px;
+            font-size: 2.8em;
+            font-weight: 900;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -1.5px;
+            line-height: 1.1;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 12px;
+            font-size: 1em;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+        }
+
+        .progress-container {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin-bottom: 32px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            border-radius: 10px;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .score {
+            text-align: center;
+            font-size: 0.95em;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 32px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        .quote-box {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 48px 40px;
+            border-radius: 24px;
+            margin-bottom: 32px;
+            font-size: 1.3em;
+            line-height: 1.7;
+            font-style: italic;
+            text-align: center;
+            box-shadow: 
+                0 20px 60px rgba(102, 126, 234, 0.2),
+                0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+            position: relative;
+            overflow: hidden;
+            font-weight: 500;
+        }
+
+        .quote-box::before {
+            content: '"';
+            font-size: 6em;
+            position: absolute;
+            top: -20px;
+            left: 25px;
+            opacity: 0.08;
+            font-family: Georgia, serif;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea, #f093fb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .quote-box::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.05) 100%);
+            pointer-events: none;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .option-btn {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            padding: 20px 24px;
+            border-radius: 14px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+            text-align: left;
+        }
+
+        .option-btn::before {
+            content: '🎤';
+            margin-right: 10px;
+            font-size: 1.1em;
+            filter: grayscale(30%);
+        }
+
+        .option-btn.philosopher::before {
+            content: '📚';
+        }
+
+        .option-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .option-btn:hover::after {
+            left: 100%;
+        }
+
+        .option-btn:hover {
+            background: rgba(102, 126, 234, 0.15);
+            border-color: rgba(102, 126, 234, 0.5);
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 12px 32px rgba(102, 126, 234, 0.3);
+        }
+
+        .option-btn.correct {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            border-color: #11998e;
+            color: white;
+            animation: correctPulse 0.6s ease;
+        }
+
+        .option-btn.incorrect {
+            background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+            border-color: #eb3349;
+            color: white;
+            animation: shake 0.5s;
+        }
+
+        @keyframes correctPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); box-shadow: 0 0 30px rgba(56, 239, 125, 0.6); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-12px); }
+            75% { transform: translateX(12px); }
+        }
+
+        .option-btn:disabled {
+            cursor: not-allowed;
+        }
+
+        .next-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 14px 40px;
+            border-radius: 50px;
+            font-size: 1em;
+            cursor: pointer;
+            display: block;
+            margin: 0 auto;
+            font-weight: 700;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+            letter-spacing: 0.3px;
+        }
+
+        .next-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(102, 126, 234, 0.5);
+        }
+
+        .next-btn:active {
+            transform: translateY(0);
+        }
+
+        .feedback {
+            text-align: center;
+            margin: 24px 0;
+            font-size: 1.1em;
+            font-weight: 700;
+            min-height: 60px;
+            line-height: 1.5;
+        }
+
+        .feedback.correct {
+            color: #38ef7d;
+            text-shadow: 0 0 15px rgba(56, 239, 125, 0.4);
+        }
+
+        .feedback.incorrect {
+            color: #f45c43;
+            text-shadow: 0 0 15px rgba(244, 92, 67, 0.4);
+        }
+
+        .final-score {
+            text-align: center;
+            font-size: 1.2em;
+            margin: 20px 0;
+        }
+
+        .final-score h2 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        .final-score-number {
+            font-size: 2.5em;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 16px 0;
+        }
+
+        .restart-btn {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            border: none;
+            padding: 14px 40px;
+            border-radius: 50px;
+            font-size: 1em;
+            cursor: pointer;
+            display: inline-block;
+            margin: 12px 8px;
+            font-weight: 700;
+            transition: all 0.3s;
+            box-shadow: 0 8px 24px rgba(17, 153, 142, 0.3);
+        }
+
+        .restart-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(17, 153, 142, 0.4);
+        }
+
+        .share-btn {
+            background: linear-gradient(135deg, #1DA1F2 0%, #0d8bd9 100%);
+            color: white;
+            border: none;
+            padding: 14px 40px;
+            border-radius: 50px;
+            font-size: 1em;
+            cursor: pointer;
+            display: inline-block;
+            margin: 12px 8px;
+            font-weight: 700;
+            transition: all 0.3s;
+            box-shadow: 0 8px 24px rgba(29, 161, 242, 0.3);
+            text-decoration: none;
+        }
+
+        .share-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(29, 161, 242, 0.4);
+        }
+
+        .share-btn::before {
+            content: '🐦';
+            margin-right: 8px;
+        }
+
+        .category-tag {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            margin-top: 8px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+        }
+
+        .rapper-tag {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .philosopher-tag {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            margin: 24px 0;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 4px;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 20px;
+            }
+
+            .container {
+                padding: 32px 24px;
+                border-radius: 24px;
+            }
+            
+            h1 {
+                font-size: 2.2em;
+                letter-spacing: -1px;
+            }
+
+            .subtitle {
+                font-size: 1em;
+            }
+            
+            .options {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            
+            .quote-box {
+                font-size: 1.3em;
+                padding: 40px 28px;
+            }
+
+            .quote-box::before {
+                font-size: 5em;
+                top: -20px;
+                left: 15px;
+            }
+
+            .option-btn {
+                padding: 20px 24px;
+                font-size: 1.05em;
+            }
+
+            .next-btn, .restart-btn, .share-btn {
+                padding: 14px 36px;
+                font-size: 1em;
+            }
+        }
+
+        @media (min-width: 1200px) {
+            .container {
+                max-width: 1000px;
+                padding: 72px;
+            }
+
+            h1 {
+                font-size: 4em;
+            }
+
+            .quote-box {
+                font-size: 1.8em;
+                padding: 64px 56px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎤 Rapper or Philosopher? 📚</h1>
+        <div class="subtitle">Can you tell the difference?</div>
+        
+        <div class="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        
+        <div class="score">Question <span id="current">1</span> of <span id="total-questions">10</span> • Score: <span id="score">0</span></div>
+        
+        <div id="quiz-content">
+            <div class="quote-box" id="quote"></div>
+            <div class="options" id="options"></div>
+            <div class="feedback" id="feedback"></div>
+            <button class="next-btn" id="next-btn" style="display: none;">Next Quote</button>
+        </div>
+    </div>
+
+    <script>
+        const allQuestions = [
+            // Original 20 questions
+            {
+                quote: "The unexamined life is not worth living",
+                answer: "Socrates",
+                type: "philosopher",
+                options: ["Kendrick Lamar", "Socrates", "Aesop Rock", "Marcus Aurelius"]
+            },
+            {
+                quote: "I'm not a businessman, I'm a business, man",
+                answer: "Jay-Z",
+                type: "rapper",
+                options: ["Seneca", "Jay-Z", "Aristotle", "Ka"]
+            },
+            {
+                quote: "We suffer more in imagination than in reality",
+                answer: "Seneca",
+                type: "philosopher",
+                options: ["Tupac", "MF DOOM", "Seneca", "Nietzsche"]
+            },
+            {
+                quote: "Reality is wrong, dreams are for real",
+                answer: "Tupac",
+                type: "rapper",
+                options: ["Tupac", "Plato", "Kant", "Mick Jenkins"]
+            },
+            {
+                quote: "Man is condemned to be free",
+                answer: "Jean-Paul Sartre",
+                type: "philosopher",
+                options: ["Kanye West", "Jean-Paul Sartre", "Camus", "Billy Woods"]
+            },
+            {
+                quote: "I never sleep, cause sleep is the cousin of death",
+                answer: "Nas",
+                type: "rapper",
+                options: ["Nietzsche", "Nas", "Earl Sweatshirt", "Schopenhauer"]
+            },
+            {
+                quote: "What doesn't kill you makes you stronger",
+                answer: "Nietzsche",
+                type: "philosopher",
+                options: ["Black Thought", "Nietzsche", "Killer Mike", "Seneca"]
+            },
+            {
+                quote: "It's far from a fairy tale, ghetto born, black male",
+                answer: "Tupac",
+                type: "rapper",
+                options: ["Tupac", "Sartre", "Fanon", "Pusha T"]
+            },
+            {
+                quote: "The wound is the place where the Light enters you",
+                answer: "Rumi",
+                type: "philosopher",
+                options: ["Rumi", "Kendrick Lamar", "Mick Jenkins", "Gibran"]
+            },
+            {
+                quote: "I'm living everyday like a hustle, another drug to juggle",
+                answer: "Biggie",
+                type: "rapper",
+                options: ["Biggie", "Camus", "Freddie Gibbs", "Jay-Z"]
+            },
+            {
+                quote: "I got power, poison, pain and joy inside my DNA",
+                answer: "Kendrick Lamar",
+                type: "rapper",
+                options: ["Kendrick Lamar", "Nietzsche", "Jung", "JID"]
+            },
+            {
+                quote: "We are what we repeatedly do. Excellence, then, is not an act, but a habit",
+                answer: "Aristotle",
+                type: "philosopher",
+                options: ["Aristotle", "Nipsey Hussle", "Roc Marciano", "Marcus Aurelius"]
+            },
+            {
+                quote: "Hell is other people",
+                answer: "Jean-Paul Sartre",
+                type: "philosopher",
+                options: ["Jean-Paul Sartre", "Eminem", "Earl Sweatshirt", "Albert Camus"]
+            },
+            {
+                quote: "I'm the ghetto's opera, the gladiator, the victorious",
+                answer: "Nas",
+                type: "rapper",
+                options: ["Nas", "Homer", "Ka", "Virgil"]
+            },
+            {
+                quote: "Started from the bottom now we're here",
+                answer: "Drake",
+                type: "rapper",
+                options: ["Drake", "Confucius", "Emerson", "Vince Staples"]
+            },
+            {
+                quote: "In the middle of difficulty lies opportunity",
+                answer: "Albert Einstein",
+                type: "philosopher",
+                options: ["Albert Einstein", "Nipsey Hussle", "Denzel Curry", "Kant"]
+            },
+            {
+                quote: "My only fear of death is coming back reincarnated",
+                answer: "Tupac",
+                type: "rapper",
+                options: ["Tupac", "Pythagoras", "Navy Blue", "Buddha"]
+            },
+            {
+                quote: "The greatest enemy of knowledge is not ignorance, it is the illusion of knowledge",
+                answer: "Stephen Hawking",
+                type: "philosopher",
+                options: ["Hawking", "Lupe Fiasco", "Talib Kweli", "Einstein"]
+            },
+            {
+                quote: "Scared money don't make none",
+                answer: "Young Jeezy",
+                type: "rapper",
+                options: ["Young Jeezy", "Adam Smith", "Benny the Butcher", "Ayn Rand"]
+            },
+            {
+                quote: "One must imagine Sisyphus happy",
+                answer: "Albert Camus",
+                type: "philosopher",
+                options: ["Camus", "Conway the Machine", "Boldy James", "Kierkegaard"]
+            },
+            // NEW QUESTIONS - 30 more for variety
+            {
+                quote: "It ain't where you're from, it's where you're at",
+                answer: "Rakim",
+                type: "rapper",
+                options: ["Rakim", "Heraclitus", "KRS-One", "Epictetus"]
+            },
+            {
+                quote: "The truth is rarely pure and never simple",
+                answer: "Oscar Wilde",
+                type: "philosopher",
+                options: ["Andre 3000", "Oscar Wilde", "Mos Def", "Voltaire"]
+            },
+            {
+                quote: "I'm out for presidents to represent me",
+                answer: "Nas",
+                type: "rapper",
+                options: ["Nas", "Machiavelli", "50 Cent", "Hobbes"]
+            },
+            {
+                quote: "Know thyself",
+                answer: "Socrates",
+                type: "philosopher",
+                options: ["J. Cole", "Socrates", "Common", "Plato"]
+            },
+            {
+                quote: "I used to read Word Up magazine, salt and pepper and Heavy D up in the limousine",
+                answer: "Biggie",
+                type: "rapper",
+                options: ["Biggie", "Proust", "Rakim", "Locke"]
+            },
+            {
+                quote: "To be yourself in a world that is constantly trying to make you something else is the greatest accomplishment",
+                answer: "Emerson",
+                type: "philosopher",
+                options: ["Tyler The Creator", "Emerson", "Mac Miller", "Thoreau"]
+            },
+            {
+                quote: "I'm not a player, I just crush a lot",
+                answer: "Big Pun",
+                type: "rapper",
+                options: ["Big Pun", "Casanova", "Fat Joe", "Don Juan"]
+            },
+            {
+                quote: "The only true wisdom is in knowing you know nothing",
+                answer: "Socrates",
+                type: "philosopher",
+                options: ["Socrates", "Aesop Rock", "Lao Tzu", "Open Mike Eagle"]
+            },
+            {
+                quote: "Money trees is the perfect place for shade",
+                answer: "Kendrick Lamar",
+                type: "rapper",
+                options: ["Kendrick Lamar", "Thoreau", "Schoolboy Q", "Marx"]
+            },
+            {
+                quote: "Life must be understood backwards, but it must be lived forwards",
+                answer: "Kierkegaard",
+                type: "philosopher",
+                options: ["Lupe Fiasco", "Kierkegaard", "J. Cole", "Hegel"]
+            },
+            {
+                quote: "I got 99 problems but a [censored] ain't one",
+                answer: "Jay-Z",
+                type: "rapper",
+                options: ["Jay-Z", "Spinoza", "Ice Cube", "Rousseau"]
+            },
+            {
+                quote: "The cave you fear to enter holds the treasure you seek",
+                answer: "Joseph Campbell",
+                type: "philosopher",
+                options: ["Joseph Campbell", "Kendrick Lamar", "Logic", "Jung"]
+            },
+            {
+                quote: "You never know how strong you are until being strong is your only choice",
+                answer: "Bob Marley",
+                type: "rapper",
+                options: ["Bob Marley", "Seneca", "Damian Marley", "Marcus Aurelius"]
+            },
+            {
+                quote: "The people who are crazy enough to think they can change the world are the ones who do",
+                answer: "Steve Jobs",
+                type: "philosopher",
+                options: ["Steve Jobs", "Kanye West", "Will.i.am", "Elon Musk"]
+            },
+            {
+                quote: "Can't knock the hustle",
+                answer: "Jay-Z",
+                type: "rapper",
+                options: ["Jay-Z", "Weber", "Pusha T", "Adam Smith"]
+            },
+            {
+                quote: "I am the master of my fate, I am the captain of my soul",
+                answer: "William Henley",
+                type: "philosopher",
+                options: ["William Henley", "Nipsey Hussle", "Invictus", "2Pac"]
+            },
+            {
+                quote: "Dead in the middle of Little Italy, little did we know that we riddled some middlemen who didn't do diddly",
+                answer: "Big Pun",
+                type: "rapper",
+                options: ["Big Pun", "Cicero", "Big L", "Demosthenes"]
+            },
+            {
+                quote: "We accept the love we think we deserve",
+                answer: "Stephen Chbosky",
+                type: "philosopher",
+                options: ["Stephen Chbosky", "Drake", "Fromm", "Bryson Tiller"]
+            },
+            {
+                quote: "If you don't stand for something, you'll fall for anything",
+                answer: "Malcolm X",
+                type: "philosopher",
+                options: ["Malcolm X", "KRS-One", "MLK Jr", "Chuck D"]
+            },
+            {
+                quote: "It was all a dream",
+                answer: "Biggie",
+                type: "rapper",
+                options: ["Biggie", "Jung", "J. Cole", "Freud"]
+            },
+            {
+                quote: "The mind is everything. What you think you become",
+                answer: "Buddha",
+                type: "philosopher",
+                options: ["Buddha", "Kendrick Lamar", "Confucius", "Common"]
+            },
+            {
+                quote: "I'm different, yeah I'm different",
+                answer: "2 Chainz",
+                type: "rapper",
+                options: ["2 Chainz", "Nietzsche", "Lil Wayne", "Kierkegaard"]
+            },
+            {
+                quote: "Be water, my friend",
+                answer: "Bruce Lee",
+                type: "philosopher",
+                options: ["Bruce Lee", "Method Man", "Lao Tzu", "RZA"]
+            },
+            {
+                quote: "Through the lights cameras and action, glamour glitters and gold, I unfold the scroll",
+                answer: "Rakim",
+                type: "rapper",
+                options: ["Rakim", "Solomon", "GZA", "Ecclesiastes"]
+            },
+            {
+                quote: "In the depth of winter, I finally learned that within me there lay an invincible summer",
+                answer: "Albert Camus",
+                type: "philosopher",
+                options: ["Camus", "Nas", "Sartre", "Pusha T"]
+            },
+            {
+                quote: "I'm the king of rock, there is none higher",
+                answer: "Run DMC",
+                type: "rapper",
+                options: ["Run DMC", "Plato", "LL Cool J", "Aristotle"]
+            },
+            {
+                quote: "The privilege of a lifetime is to become who you truly are",
+                answer: "Carl Jung",
+                type: "philosopher",
+                options: ["Carl Jung", "J. Cole", "Freud", "Kendrick Lamar"]
+            },
+            {
+                quote: "I get money, money I got",
+                answer: "50 Cent",
+                type: "rapper",
+                options: ["50 Cent", "Carnegie", "The Game", "Rockefeller"]
+            },
+            {
+                quote: "Everything is everything",
+                answer: "Lauryn Hill",
+                type: "rapper",
+                options: ["Lauryn Hill", "Heraclitus", "Erykah Badu", "Parmenides"]
+            },
+            {
+                quote: "Change is the only constant in life",
+                answer: "Heraclitus",
+                type: "philosopher",
+                options: ["Heraclitus", "Andre 3000", "Buddha", "OutKast"]
+            }
+        ];
+
+        // Shuffle and select 10 random questions
+        let questions = [];
+        
+        function selectRandomQuestions() {
+            const shuffled = [...allQuestions].sort(() => Math.random() - 0.5);
+            questions = shuffled.slice(0, 10);
+        }
+
+        selectRandomQuestions();
+
+        let currentQuestion = 0;
+        let score = 0;
+        let answered = false;
+
+        const totalQuestions = questions.length;
+        document.getElementById('total-questions').textContent = totalQuestions;
+
+        function updateProgress() {
+            const progress = ((currentQuestion + 1) / totalQuestions) * 100;
+            document.getElementById('progress-bar').style.width = progress + '%';
+        }
+
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+
+        function loadQuestion() {
+            answered = false;
+            const question = questions[currentQuestion];
+            document.getElementById('current').textContent = currentQuestion + 1;
+            document.getElementById('quote').textContent = question.quote;
+            document.getElementById('feedback').textContent = '';
+            document.getElementById('feedback').className = 'feedback';
+            document.getElementById('next-btn').style.display = 'none';
+            
+            updateProgress();
+            
+            const optionsContainer = document.getElementById('options');
+            optionsContainer.innerHTML = '';
+            
+            const shuffledOptions = shuffleArray(question.options);
+            shuffledOptions.forEach(option => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                
+                const philosopherNames = ['Socrates', 'Seneca', 'Jean-Paul Sartre', 'René Descartes', 
+                                         'Heraclitus', 'Albert Einstein', 'Nietzsche', 'Plato', 
+                                         'Marcus Aurelius', 'Sun Tzu', 'Martin Heidegger', 'Epicurus',
+                                         'Arthur Schopenhauer', 'Confucius', 'Lao Tzu', 'Aristotle',
+                                         'Albert Camus', 'Karl Marx', 'Ralph Waldo Emerson', 'Kant',
+                                         'Warren Buffett', 'Viktor Frankl', 'Rumi', 'Oscar Wilde',
+                                         'Iris Murdoch', 'Homer', 'Virgil', 'Thomas Jefferson',
+                                         'Pythagoras', 'Buddha', 'Stephen Hawking', 'Adam Smith',
+                                         'Benjamin Franklin', 'Ayn Rand', 'Kierkegaard', 'Simone de Beauvoir',
+                                         'Montaigne', 'Carl Jung', 'Simone Weil', 'James Baldwin', 'Bob Marley',
+                                         'Camus', 'Sartre', 'Fanon', 'Gibran', 'Emerson', 'Hawking', 'Einstein',
+                                         'Jefferson', 'Jung'];
+                
+                if (philosopherNames.includes(option)) {
+                    btn.classList.add('philosopher');
+                }
+                
+                btn.textContent = option;
+                btn.onclick = () => checkAnswer(option, btn);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(selected, btn) {
+            if (answered) return;
+            answered = true;
+
+            const question = questions[currentQuestion];
+            const allButtons = document.querySelectorAll('.option-btn');
+            
+            allButtons.forEach(button => {
+                button.disabled = true;
+                if (button.textContent === question.answer) {
+                    button.classList.add('correct');
+                }
+            });
+
+            const categoryTag = `<span class="category-tag ${question.type}-tag">${question.type === 'rapper' ? '🎤 Rapper' : '📚 Philosopher'}</span>`;
+
+            if (selected === question.answer) {
+                score++;
+                document.getElementById('score').textContent = score;
+                document.getElementById('feedback').innerHTML = `✓ Correct! That's ${question.answer}<br>${categoryTag}`;
+                document.getElementById('feedback').className = 'feedback correct';
+            } else {
+                btn.classList.add('incorrect');
+                document.getElementById('feedback').innerHTML = `✗ Wrong! That was ${question.answer}<br>${categoryTag}`;
+                document.getElementById('feedback').className = 'feedback incorrect';
+            }
+
+            document.getElementById('next-btn').style.display = 'block';
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            if (currentQuestion < questions.length) {
+                loadQuestion();
+            } else {
+                showFinalScore();
+            }
+        }
+
+        function showFinalScore() {
+            const percentage = Math.round((score / questions.length) * 100);
+            let message = '';
+            if (percentage >= 90) message = '🧠 Philosophical genius!';
+            else if (percentage >= 75) message = '📖 Impressive wisdom!';
+            else if (percentage >= 60) message = '🤔 Well-read individual!';
+            else if (percentage >= 45) message = '👍 Not bad at all!';
+            else message = '😅 Time to study up!';
+
+            const tweetText = `I scored ${score}/${questions.length} (${percentage}%) on Rapper or Philosopher! Can you beat my score? 🎤📚`;
+            const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
+
+            document.getElementById('quiz-content').innerHTML = `
+                <div class="final-score">
+                    <h2>Quiz Complete!</h2>
+                    <div class="final-score-number">${score}/${questions.length}</div>
+                    <div class="stats">
+                        <div class="stat-item">
+                            <div class="stat-number">${percentage}%</div>
+                            <div class="stat-label">Accuracy</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">${score}</div>
+                            <div class="stat-label">Correct</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">${questions.length - score}</div>
+                            <div class="stat-label">Wrong</div>
+                        </div>
+                    </div>
+                    <p style="margin: 24px 0; font-size: 1.3em; color: #667eea; font-weight: 700;">${message}</p>
+                    <div>
+                        <button class="restart-btn" onclick="restartQuiz()">🔄 Play Again</button>
+                        <a href="${tweetUrl}" target="_blank" class="share-btn">Share Score</a>
+                    </div>
+                </div>
+            `;
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            document.getElementById('score').textContent = '0';
+            document.getElementById('current').textContent = '1';
+            document.getElementById('quiz-content').innerHTML = `
+                <div class="quote-box" id="quote"></div>
+                <div class="options" id="options"></div>
+                <div class="feedback" id="feedback"></div>
+                <button class="next-btn" id="next-btn" style="display: none;">Next Quote</button>
+            `;
+            document.getElementById('next-btn').onclick = nextQuestion;
+            loadQuestion();
+        }
+
+        document.getElementById('next-btn').onclick = nextQuestion;
+        loadQuestion();
+    </script>
+</body>
+</html>
