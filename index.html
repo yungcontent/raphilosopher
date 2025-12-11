@@ -908,7 +908,9 @@
             else if (percentage >= 45) message = '👍 Not bad at all!';
             else message = '😅 Time to study up!';
 
-            const tweetText = `I scored ${score}/${questions.length} (${percentage}%) on Rapper or Philosopher! Can you beat my score? 🎤📚`;
+            const tweetText = `Just scored ${score}/${questions.length} on Rapper or Philosopher 🎤📚
+
+Your turn: https://rapperorphilosopher.vercel.app/`;
             const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
 
             document.getElementById('quiz-content').innerHTML = `
