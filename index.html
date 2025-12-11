@@ -203,17 +203,6 @@
             text-align: left;
         }
 
-        .option-btn::before {
-            content: '🎤';
-            margin-right: 10px;
-            font-size: 1.1em;
-            filter: grayscale(30%);
-        }
-
-        .option-btn.philosopher::before {
-            content: '📚';
-        }
-
         .option-btn::after {
             content: '';
             position: absolute;
@@ -413,7 +402,7 @@
         }
 
         .stat-number {
-            font-size: 2em;
+            font-size: 1.8em;
             font-weight: 800;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             -webkit-background-clip: text;
@@ -422,7 +411,7 @@
         }
 
         .stat-label {
-            font-size: 0.9em;
+            font-size: 0.85em;
             color: #666;
             margin-top: 4px;
             font-weight: 600;
@@ -439,12 +428,12 @@
             }
             
             h1 {
-                font-size: 2.2em;
+                font-size: 2em;
                 letter-spacing: -1px;
             }
 
             .subtitle {
-                font-size: 1em;
+                font-size: 0.9em;
             }
             
             .options {
@@ -453,24 +442,24 @@
             }
             
             .quote-box {
-                font-size: 1.3em;
-                padding: 40px 28px;
+                font-size: 1.15em;
+                padding: 36px 24px;
             }
 
             .quote-box::before {
-                font-size: 5em;
-                top: -20px;
+                font-size: 4.5em;
+                top: -15px;
                 left: 15px;
             }
 
             .option-btn {
-                padding: 20px 24px;
-                font-size: 1.05em;
+                padding: 18px 20px;
+                font-size: 0.95em;
             }
 
             .next-btn, .restart-btn, .share-btn {
-                padding: 14px 36px;
-                font-size: 1em;
+                padding: 12px 32px;
+                font-size: 0.95em;
             }
         }
 
@@ -481,12 +470,12 @@
             }
 
             h1 {
-                font-size: 4em;
+                font-size: 3.2em;
             }
 
             .quote-box {
-                font-size: 1.8em;
-                padding: 64px 56px;
+                font-size: 1.4em;
+                padding: 52px 48px;
             }
         }
     </style>
@@ -865,24 +854,6 @@
             shuffledOptions.forEach(option => {
                 const btn = document.createElement('button');
                 btn.className = 'option-btn';
-                
-                const philosopherNames = ['Socrates', 'Seneca', 'Jean-Paul Sartre', 'René Descartes', 
-                                         'Heraclitus', 'Albert Einstein', 'Nietzsche', 'Plato', 
-                                         'Marcus Aurelius', 'Sun Tzu', 'Martin Heidegger', 'Epicurus',
-                                         'Arthur Schopenhauer', 'Confucius', 'Lao Tzu', 'Aristotle',
-                                         'Albert Camus', 'Karl Marx', 'Ralph Waldo Emerson', 'Kant',
-                                         'Warren Buffett', 'Viktor Frankl', 'Rumi', 'Oscar Wilde',
-                                         'Iris Murdoch', 'Homer', 'Virgil', 'Thomas Jefferson',
-                                         'Pythagoras', 'Buddha', 'Stephen Hawking', 'Adam Smith',
-                                         'Benjamin Franklin', 'Ayn Rand', 'Kierkegaard', 'Simone de Beauvoir',
-                                         'Montaigne', 'Carl Jung', 'Simone Weil', 'James Baldwin', 'Bob Marley',
-                                         'Camus', 'Sartre', 'Fanon', 'Gibran', 'Emerson', 'Hawking', 'Einstein',
-                                         'Jefferson', 'Jung'];
-                
-                if (philosopherNames.includes(option)) {
-                    btn.classList.add('philosopher');
-                }
-                
                 btn.textContent = option;
                 btn.onclick = () => checkAnswer(option, btn);
                 optionsContainer.appendChild(btn);
